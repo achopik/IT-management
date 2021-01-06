@@ -1,0 +1,9 @@
+.idea
+__pycache__
+.DS_Store
+postgres_data
+*log.txt
+*logs.txt
+celerybeat-schedule
+/test.http
+/management_system/staticfiles/
