@@ -7,12 +7,20 @@ from management.choices import (
 
 
 class Location(models.Model):
+    """
+    Represents a geographic location of something
+    """
+
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     office = models.CharField(max_length=255)
 
 
 class Technology(models.Model):
+    """
+    Represents a certain technology
+    """
+
     name = models.CharField(max_length=255)
 
     class Meta:
@@ -21,6 +29,9 @@ class Technology(models.Model):
 
 
 class Skill(models.Model):
+    """
+    Represents a certain skill in some technology
+    """
     technology = models.ForeignKey(
         Technology,
         on_delete=models.CASCADE
@@ -28,6 +39,10 @@ class Skill(models.Model):
 
 
 class Employee(models.Model):
+    """
+    Represents an employee
+    """
+
     email = models.EmailField()
     first_name = models.CharField(max_length=60)
     last_name = models.CharField(max_length=60)
@@ -69,6 +84,9 @@ class Employee(models.Model):
 
 
 class Department(models.Model):
+    """
+    Represents a develop department
+    """
     name = models.CharField(max_length=255)
     resource_manager = models.ForeignKey(
         Employee,
@@ -84,6 +102,10 @@ class Department(models.Model):
 
 
 class Project(models.Model):
+    """
+    Represents a certain project
+    """
+
     department = models.ForeignKey(
         Department,
         on_delete=models.SET_NULL,
@@ -107,6 +129,10 @@ class Project(models.Model):
 
 
 class Position(models.Model):
+    """
+    Represents a position in a project
+    """
+
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE
@@ -144,6 +170,10 @@ class Position(models.Model):
 
 
 class Opportunity(models.Model):
+    """
+    An opportunity of a project realisation
+    """
+
     customer_logo = models.ImageField(null=True, blank=True)
     customer_name = models.CharField(max_length=255)
     location = models.ForeignKey(
@@ -161,6 +191,11 @@ class Opportunity(models.Model):
         max_length=20,
         choices=OpportunityPriority.choices()
     )
+    project = models.OneToOneField(
+        Project,
+        on_delete=models.CASCADE,
+        verbose_name="related project"
+    )
     project_start_date = models.DateField(auto_now_add=True)
     project_duration = models.PositiveIntegerField(
         verbose_name="project duration in days"
@@ -173,8 +208,16 @@ class Opportunity(models.Model):
     sales_name = models.CharField(max_length=255)
     delivery_supervisor_name = models.CharField(max_length=255)
 
+    class Meta:
+        verbose_name = "Opportunity"
+        verbose_name_plural = "Opportunities"
+
 
 class Group(models.Model):
+    """
+    A certain group with its lead
+    """
+
     name = models.CharField(max_length=255)
     lead = models.ForeignKey(
         Employee,
@@ -185,4 +228,12 @@ class Group(models.Model):
 
 
 class Team(Group):
-    utilization_target = models.PositiveSmallIntegerField()
+    """
+    A team with lead and target
+    """
+
+    utilization_target = models.ForeignKey(
+        Technology,
+        on_delete=models.SET_NULL,
+        null=True
+    )
