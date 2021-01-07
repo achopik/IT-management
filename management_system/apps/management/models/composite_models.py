@@ -1,41 +1,7 @@
 from django.db import models
 
-from management.choices import (
-    EnglishLevel, OpportunityPriority,
-    PositionStatus, Sex
-)
-
-
-class Location(models.Model):
-    """
-    Represents a geographic location of something
-    """
-
-    country = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    office = models.CharField(max_length=255)
-
-
-class Technology(models.Model):
-    """
-    Represents a certain technology
-    """
-
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = "Technology"
-        verbose_name_plural = "Technologies"
-
-
-class Skill(models.Model):
-    """
-    Represents a certain skill in some technology
-    """
-    technology = models.ForeignKey(
-        Technology,
-        on_delete=models.CASCADE
-    )
+from models.basic_models import Location, Skill, Technology
+from models.choices import EnglishLevel, OpportunityPriority, PositionStatus, Sex
 
 
 class Employee(models.Model):
@@ -200,7 +166,7 @@ class Opportunity(models.Model):
     project_duration = models.PositiveIntegerField(
         verbose_name="project duration in days"
     )
-    opportunuty_probability = models.PositiveSmallIntegerField(
+    opportunity_probability = models.PositiveSmallIntegerField(
         "Opportunity probability rate in percents"
     )
     technology_name = models.CharField(max_length=255)
@@ -211,29 +177,3 @@ class Opportunity(models.Model):
     class Meta:
         verbose_name = "Opportunity"
         verbose_name_plural = "Opportunities"
-
-
-class Group(models.Model):
-    """
-    A certain group with its lead
-    """
-
-    name = models.CharField(max_length=255)
-    lead = models.ForeignKey(
-        Employee,
-        on_delete=models.SET_NULL,
-        null=True
-    )
-    utilization_current = models.PositiveSmallIntegerField()
-
-
-class Team(Group):
-    """
-    A team with lead and target
-    """
-
-    utilization_target = models.ForeignKey(
-        Technology,
-        on_delete=models.SET_NULL,
-        null=True
-    )
