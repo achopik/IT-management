@@ -1,7 +1,5 @@
 from django.db import models
 
-from models.composite_models import Employee
-
 
 class Location(models.Model):
     """
@@ -46,7 +44,7 @@ class Group(models.Model):
 
     name = models.CharField(max_length=255)
     lead = models.ForeignKey(
-        Employee,
+        "management.Employee",
         on_delete=models.SET_NULL,
         null=True
     )

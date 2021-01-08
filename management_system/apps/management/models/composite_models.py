@@ -1,7 +1,11 @@
 from django.db import models
 
-from models.basic_models import Location, Skill, Technology
-from models.choices import EnglishLevel, OpportunityPriority, PositionStatus, Sex
+from management.models.basic_models import (
+    Location, Skill, Technology
+)
+from management.models.choices import (
+    EnglishLevel, OpportunityPriority, PositionStatus, Sex
+)
 
 
 class Employee(models.Model):
@@ -57,12 +61,13 @@ class Department(models.Model):
     resource_manager = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
     )
     head = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        related_name="managed_department",
     )
     utilization_current = models.PositiveSmallIntegerField()
 
@@ -85,7 +90,8 @@ class Project(models.Model):
     project_manager = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        related_name="managed_project"
     )
     partner_name = models.CharField(max_length=255)
     partner_contact = models.URLField()
@@ -108,7 +114,7 @@ class Position(models.Model):
     assignment = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
     )
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True, blank=True)
@@ -121,7 +127,8 @@ class Position(models.Model):
     supervisor = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        related_name="supervised_position"
     )
     status = models.CharField(
         max_length=20,
@@ -140,7 +147,7 @@ class Opportunity(models.Model):
     An opportunity of a project realisation
     """
 
-    customer_logo = models.ImageField(null=True, blank=True)
+    customer_logo = models.FileField(null=True, blank=True)
     customer_name = models.CharField(max_length=255)
     location = models.ForeignKey(
         Location,
@@ -150,7 +157,8 @@ class Opportunity(models.Model):
     staffing_location = models.ForeignKey(
         Location,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        related_name="staffed_opportunity"
     )
     name = models.CharField(max_length=255)
     priority = models.CharField(
