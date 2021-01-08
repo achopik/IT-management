@@ -7,3 +7,4 @@ postgres_data
 celerybeat-schedule
 /test.http
 /management_system/staticfiles/
+.env.dev
