@@ -17,7 +17,7 @@ class TokenWorker:
         Returns user id and confirms user if token is valid and user exists
         """
 
-        uid = _get_user_id(token)
+        uid = TokenWorker._get_user_id(token)
         user = User.objects.get(id=uid)
         if uid and user:
             user.profile.is_confirmed = True
