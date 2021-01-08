@@ -8,3 +8,5 @@ celerybeat-schedule
 /test.http
 /management_system/staticfiles/
 .env.dev
+celery_log.txt
+beat_log.txt

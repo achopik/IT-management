@@ -6,13 +6,13 @@ from django.core.mail import EmailMessage
 from django.shortcuts import reverse
 from django.template.loader import get_template
 
-from .tokens import create_token
+from registration.tokens import TokenWorker
 
 
 @shared_task
 def send_confirmation_mail(user_id):
     user = User.objects.get(id=user_id)
-    token = create_token(user)
+    token = TokenWorker.create_token(user)
     url = "http://localhost:8000" + reverse(
         "activate",
         kwargs={"token": token}
@@ -24,7 +24,7 @@ def send_confirmation_mail(user_id):
     )
 
     mail = EmailMessage(
-        "Trading Service Email Confirmation",
+        "IT-management Service Email Confirmation",
         message,
         to=[user.email],
         from_email=settings.EMAIL_HOST_USER,
@@ -36,7 +36,7 @@ def send_confirmation_mail(user_id):
 @shared_task
 def send_password_reset_mail(user_id):
     user = User.objects.get(id=user_id)
-    token = create_token(user)
+    token = TokenWorker.create_token(user)
     url = "http://localhost:8000" + reverse(
         "confirm_reset_password",
         kwargs={"token": token}
@@ -48,7 +48,7 @@ def send_password_reset_mail(user_id):
     )
 
     mail = EmailMessage(
-        "Trading Service Password Reset",
+        "IT-management Service Password Reset",
         message,
         to=[user.email],
         from_email=settings.EMAIL_HOST_USER,

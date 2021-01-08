@@ -28,6 +28,7 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     "management",
+    "registration"
 ]
 
 THIRD_PARTY_APPS = [
@@ -167,9 +168,6 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_RESULT_BACKEND = "redis://redis:6379"
-
-CELERY_BEAT_SCHEDULE = {}
-
 
 # Mailing configs
 

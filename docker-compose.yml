@@ -20,3 +20,24 @@ services:
     depends_on:
       - db
     restart: on-failure
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    hostname: "redis"
+    depends_on:
+      - db
+    restart: on-failure
+
+  celery:
+    build: ./management_system
+    container_name: celery
+    entrypoint: celery -A core worker -l INFO -f celery_log.txt
+    env_file:
+      - ./.env.dev
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - db
+      - redis
+    restart: on-failure

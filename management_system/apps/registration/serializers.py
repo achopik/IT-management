@@ -2,7 +2,7 @@ from django.contrib.auth import password_validation
 from django.contrib.auth.models import User
 
 from registration.tasks import send_password_reset_mail
-from registration.tokens import check_token
+from registration.tokens import TokenWorker
 
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
@@ -64,7 +64,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
         try:
             token = self.context.get('view').kwargs['token']
-            uid = check_token(token)
+            uid = TokenWorker.check_token(token)
             self.user = User.objects.get(id=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             raise ValidationError({'token': ['Invalid value']})
