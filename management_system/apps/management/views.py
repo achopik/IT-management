@@ -87,7 +87,7 @@ class PositionViewSet(CreateRetrieveUpdateViewSet):
         return PositionSerializer
 
 
-class EmployeeViewSet(CreateRetrieveUpdateViewSet):
+class EmployeeViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
     queryset = Employee.objects.all()
 
     def get_serializer_class(self):
