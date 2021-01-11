@@ -11,13 +11,13 @@ class TokenWorker:
     Class providing static methods for generation and confirmation of JWT
     """
 
-    @staticmethod
-    def check_token(token) -> Union[int, bool]:
+    @classmethod
+    def check_token(cls, token) -> Union[int, bool]:
         """
         Returns user id and confirms user if token is valid and user exists
         """
 
-        uid = TokenWorker._get_user_id(token)
+        uid = cls._get_user_id(token)
         user = User.objects.get(id=uid)
         if uid and user:
             user.profile.is_confirmed = True
@@ -38,6 +38,5 @@ class TokenWorker:
         try:
             user_id = AccessToken(token, verify=True).get('user_id')
             return user_id
-
         except TokenError:
             return False

@@ -76,7 +76,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         self.password = password1
         return attrs
 
-    def save(self):
+    def save(self, **kwargs):
         self.user.set_password(self.password)
         self.user.save()
 

@@ -10,3 +10,4 @@ celerybeat-schedule
 .env.dev
 celery_log.txt
 beat_log.txt
+docker-compose.dev.yml
