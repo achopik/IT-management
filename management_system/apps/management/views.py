@@ -1,26 +1,42 @@
-from rest_framework import mixins, viewsets, status
-from rest_framework.views import Response
-
 from management.models import (
-    Department, Employee, Group, Location, Opportunity,
-    Position, Project, Skill, Team, Technology
+    Department,
+    Employee,
+    Group,
+    Location,
+    Opportunity,
+    Position,
+    Project,
+    Skill,
+    Team,
+    Technology,
 )
 from management.serializers import (
-    DepartmentReadOnlySerializer, DepartmentSerializer,
-    EmployeeReadOnlySerializer, EmployeeSerializer,
-    GroupReadOnlySerializer, GroupSerializer,
-    LocationSerializer, OpportunityReadOnlySerializer,
-    OpportunitySerializer, PositionReadOnlySerializer,
-    PositionSerializer, ProjectReadOnlySerializer,
-    ProjectSerializer, SkillReadOnlySerializer,
-    SkillSerializer, TeamReadOnlySerializer,
-    TeamSerializer, TechnologySerializer
+    DepartmentReadOnlySerializer,
+    DepartmentSerializer,
+    EmployeeReadOnlySerializer,
+    EmployeeSerializer,
+    GroupReadOnlySerializer,
+    GroupSerializer,
+    LocationSerializer,
+    OpportunityReadOnlySerializer,
+    OpportunitySerializer,
+    PositionReadOnlySerializer,
+    PositionSerializer,
+    ProjectReadOnlySerializer,
+    ProjectSerializer,
+    SkillReadOnlySerializer,
+    SkillSerializer,
+    TeamReadOnlySerializer,
+    TeamSerializer,
+    TechnologySerializer,
 )
-
 from management.services.statistics import (
-    get_all_department_stats, count_opportunities_by_priorities
+    count_opportunities_by_priorities,
+    get_all_department_stats,
 )
 
+from rest_framework import mixins, status, viewsets
+from rest_framework.views import Response
 
 # Classes that should be inherited
 

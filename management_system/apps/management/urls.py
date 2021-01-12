@@ -1,3 +1,4 @@
+# flake8: noqa
 from rest_framework.routers import DefaultRouter
 
 from management.views import (

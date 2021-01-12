@@ -1,4 +1,4 @@
-from management.models import Opportunity, OpportunityPriority, Employee
+from management.models import Employee, Opportunity, OpportunityPriority
 
 
 def count_opportunities_by_priorities() -> dict:

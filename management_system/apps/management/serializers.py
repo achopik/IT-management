@@ -1,10 +1,10 @@
-from rest_framework import serializers
-
 from management.models import (
-    Department, Employee, Group, Location,
-    Opportunity, Position, Project,
-    Skill, Team, Technology
+    Department, Employee, Group,
+    Location, Opportunity, Position,
+    Project, Skill, Team, Technology,
 )
+
+from rest_framework import serializers
 
 
 class LocationSerializer(serializers.ModelSerializer):
