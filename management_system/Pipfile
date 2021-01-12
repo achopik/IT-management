@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "*"
+djangorestframework = "*"
+psycopg2-binary = "*"
+djangorestframework-simplejwt = "*"
+celery = "*"
+redis = "*"
+pytest-django = "*"
+mixer = "*"
+django-celery-beat = "*"
+gunicorn = "*"
+
+[requires]
+python_version = "3.8"
