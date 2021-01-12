@@ -1,4 +1,5 @@
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, status
+from rest_framework.views import Response
 
 from management.models import (
     Department, Employee, Group, Location, Opportunity,
@@ -14,6 +15,10 @@ from management.serializers import (
     ProjectSerializer, SkillReadOnlySerializer,
     SkillSerializer, TeamReadOnlySerializer,
     TeamSerializer, TechnologySerializer
+)
+
+from management.services.statistics import (
+    get_all_department_stats, count_opportunities_by_priorities
 )
 
 
@@ -112,3 +117,23 @@ class OpportunityViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
         if self.action == "retrieve" or self.action == "list":
             return OpportunityReadOnlySerializer
         return OpportunitySerializer
+
+
+class DepartmentStatsViewSet(viewsets.GenericViewSet):
+
+    def retrieve(self, request, *args, **kwargs):
+        stats = get_all_department_stats(kwargs['pk'])
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )
+
+
+class OpportunityStatsViewSet(viewsets.GenericViewSet):
+
+    def list(self, request, *args, **kwargs):
+        stats = count_opportunities_by_priorities()
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )

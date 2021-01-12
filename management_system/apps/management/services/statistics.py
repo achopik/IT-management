@@ -39,7 +39,7 @@ def count_employees_by_level(department_id: int) -> dict:
     result = {}
 
     for level in levels:
-        employees = Employee.objects.filter(department_id=department_id)
+        employees = Employee.objects.filter(department_id)
         result.update(
             {
                 f"{level}_level_employees": employees.filter(
