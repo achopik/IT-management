@@ -56,6 +56,9 @@ class Employee(models.Model):
         null=True
     )
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}: {self.job_title}"
+
 
 class Department(models.Model):
     """
@@ -73,7 +76,10 @@ class Department(models.Model):
         null=True,
         related_name="managed_department",
     )
-    utilization_current = models.PositiveSmallIntegerField()
+    utilization_current = models.PositiveSmallIntegerField(editable=False)
+
+    def __str__(self):
+        return f"{self.name} department (head: {self.head})"
 
 
 class Project(models.Model):
@@ -102,6 +108,9 @@ class Project(models.Model):
     description = models.TextField()
     site_link = models.URLField()
     type = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.site_link
 
 
 class Position(models.Model):
