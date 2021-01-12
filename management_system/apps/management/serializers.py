@@ -48,9 +48,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     @staticmethod
     def validate_opportunity(value):
         print("In project serializer", value)
+        if not value:
+            raise serializers.ValidationError("Opportunity can't be blank")
         if (
-            value
-            and Position.objects.filter(
+            Position.objects.filter(
                 opportunity=value, status=PositionStatus.ACTIVE
             ).exists()
         ):
