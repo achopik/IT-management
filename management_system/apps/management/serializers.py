@@ -1,7 +1,8 @@
 from management.models import (
     Department, Employee, Group,
     Location, Opportunity, Position,
-    Project, Skill, Team, Technology,
+    PositionStatus, Project, Skill,
+    Team, Technology,
 )
 
 from rest_framework import serializers
@@ -44,6 +45,18 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_opportunity(value):
+        print("In project serializer", value)
+        if (
+            value
+            and Position.objects.filter(
+                opportunity=value, status=PositionStatus.ACTIVE
+            ).exists()
+        ):
+            raise serializers.ValidationError("Not all positions are secured!")
+        return value
+
     class Meta:
         model = Project
         fields = "__all__"
