@@ -50,6 +50,11 @@ class Employee(models.Model):
     )
     technology_skills = models.ManyToManyField(Skill)
     role = models.CharField(max_length=255)
+    working_department = models.ForeignKey(
+        "management.Department",
+        on_delete=models.SET_NULL,
+        null=True
+    )
 
 
 class Department(models.Model):
