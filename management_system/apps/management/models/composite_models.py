@@ -13,7 +13,7 @@ class Employee(models.Model):
     Represents an employee
     """
 
-    email = models.EmailField()
+    email = models.EmailField(unique=True, blank=True, null=True)
     first_name = models.CharField(max_length=60)
     last_name = models.CharField(max_length=60)
     sex = models.CharField(
@@ -50,7 +50,6 @@ class Employee(models.Model):
     )
     technology_skills = models.ManyToManyField(Skill)
     role = models.CharField(max_length=255)
-    # position_n = ?
 
 
 class Department(models.Model):
