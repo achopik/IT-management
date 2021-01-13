@@ -14,10 +14,10 @@ class MailSender:
     Base class for mail sending. Override:
     template_path, view_name, subject to get needed functionality.
 
-    Use send_mail() method to send mail.
-    Use <Subclass name>(user_id) to re-initialize sender.
+    Use send_mail() method to send mail and
+    Use <Child class name>(user_id) to re-initialize sender.
     Class can have only one instance for performance purposes.
-    Do not override __new__ method in order to save that property.
+    Do not override __new__ method in order to save that property
     """
 
     mail_class = EmailMessage
