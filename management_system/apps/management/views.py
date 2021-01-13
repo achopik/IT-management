@@ -99,8 +99,8 @@ class PositionViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
 
 class EmployeeViewSet(
     SerializerChooseMixin,
-    CreateRetrieveUpdateViewSet,
     mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
 ):
     queryset = Employee.objects.all()
     write_serializer = EmployeeSerializer
@@ -109,8 +109,8 @@ class EmployeeViewSet(
 
 class ProjectViewSet(
     SerializerChooseMixin,
-    CreateRetrieveUpdateViewSet,
     mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
 ):
     queryset = Project.objects.all()
     write_serializer = ProjectSerializer
@@ -119,8 +119,8 @@ class ProjectViewSet(
 
 class OpportunityViewSet(
     SerializerChooseMixin,
-    CreateRetrieveUpdateViewSet,
-    mixins.ListModelMixin
+    mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
 ):
     queryset = Opportunity.objects.all()
     write_serializer = OpportunitySerializer
@@ -128,7 +128,7 @@ class OpportunityViewSet(
 
 
 """
-Statistics API endpoints
+Statistics endpoints
 """
 
 
