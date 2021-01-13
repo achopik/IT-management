@@ -102,8 +102,6 @@ class GroupReadOnlySerializer(serializers.ModelSerializer):
 
 
 class TeamReadOnlySerializer(GroupReadOnlySerializer):
-    utilization_target = TechnologySerializer(read_only=True)
-
     class Meta:
         model = Team
         fields = "__all__"
