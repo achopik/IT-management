@@ -21,8 +21,7 @@ class EnglishLevel(Base):
 
 class PositionStatus(Base):
     ACTIVE = "Active"
-    OCCUPIED = "Occupied"
-    PENDING = "Pending"
+    SECURED = "Secured"
 
 
 class OpportunityPriority(Base):

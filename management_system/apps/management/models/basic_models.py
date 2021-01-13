@@ -10,6 +10,9 @@ class Location(models.Model):
     city = models.CharField(max_length=255)
     office = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f"{self.city}, {self.country}: {self.office}"
+
 
 class Technology(models.Model):
     """
@@ -21,6 +24,9 @@ class Technology(models.Model):
     class Meta:
         verbose_name = "Technology"
         verbose_name_plural = "Technologies"
+
+    def __str__(self):
+        return self.name
 
 
 class Skill(models.Model):
@@ -36,6 +42,9 @@ class Skill(models.Model):
         verbose_name="A certain skill description"
     )
 
+    def __str__(self):
+        return f"{self.technology}: {self.skill}"
+
 
 class Group(models.Model):
     """
@@ -49,6 +58,9 @@ class Group(models.Model):
         null=True
     )
     utilization_current = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.name} leaded by: {self.lead}"
 
 
 class Team(Group):

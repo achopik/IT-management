@@ -8,9 +8,9 @@ services:
       - ./postgres_data:/var/lib/postgresql/data/
     restart: on-failure
 
-  app:
+  web:
     build: ./management_system
-    container_name: app
+    container_name: web
     volumes:
       - .:/usr/src/app/
     ports:
