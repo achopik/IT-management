@@ -5,7 +5,7 @@ from management.views import (
     DepartmentViewSet, EmployeeViewSet, GroupViewSet,
     LocationViewSet, OpportunityViewSet, PositionViewSet,
     ProjectViewSet, SkillViewSet, TeamViewSet, TechnologyViewSet,
-    DepartmentStatsViewSet, OpportunityStatsViewSet
+    DepartmentStatsViewSet, OpportunityStatsViewSet, DomainOpportunityViewSet,
 )
 
 
@@ -23,6 +23,7 @@ router.register("technology", TechnologyViewSet)
 
 router.register("department-statistics", DepartmentStatsViewSet, basename="department-statistics")
 router.register("opportunity-statistics", OpportunityStatsViewSet, basename="opportunity-statistics")
+router.register("domain-statistics", DomainOpportunityViewSet, basename="domain-statistics")
 
 
 urlpatterns = router.urls

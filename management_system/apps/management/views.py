@@ -17,6 +17,7 @@ from management.serializers import (
 from management.services.statistics import (
     count_opportunities_by_priorities,
     get_all_department_stats,
+    get_domain_opportunity_stats
 )
 
 from rest_framework import mixins, status, viewsets
@@ -133,6 +134,16 @@ class OpportunityStatsViewSet(viewsets.GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         stats = count_opportunities_by_priorities()
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )
+
+
+class DomainOpportunityViewSet(viewsets.GenericViewSet):
+
+    def retrieve(self, request, *args, **kwargs):
+        stats = get_domain_opportunity_stats(kwargs['pk'])
         return Response({
             'statistics': stats},
             status=status.HTTP_200_OK
