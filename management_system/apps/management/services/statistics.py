@@ -1,4 +1,6 @@
-from management.models import Employee, Opportunity, OpportunityPriority
+from django.db.models import Count, Q
+
+from management.models import Employee, Opportunity, OpportunityPriority, Department
 
 
 def count_opportunities_by_priorities() -> dict:
@@ -21,40 +23,15 @@ def count_opportunities_by_priorities() -> dict:
 
 def get_all_department_stats(department_id: int) -> dict:
     """
-    Just combines all info about department
+    Returns employee total count and counts by level
     """
-    return {
-        **count_all_employees_in_department(department_id),
-        **count_employees_by_level(department_id)
-    }
-
-
-def count_employees_by_level(department_id: int) -> dict:
-    """
-    Returns a dictionary containing count of employees by their job level
-    Employees are related to a certain department
-    """
-
     levels = ("junior", "middle", "senior")
-    result = {}
-
-    for level in levels:
-        employees = Employee.objects.filter(working_department_id=department_id)
-        result.update(
-            {
-                f"{level}_level_employees": employees
-                .filter(job_level__contains=level)
-                .count()
-            }
-        )
-    return result
-
-
-def count_all_employees_in_department(department_id: int) -> dict:
-    return {
-        "total_employees": (
-            Employee.objects
-            .filter(working_department_id=department_id)
-            .count()
-        )
-    }
+    statistics = Department.objects.filter(id=department_id).aggregate(
+        **{
+            f"{level}_level_employees": Count(
+                "employee", filter=Q(employee__job_level__iexact=level)
+            ) for level in levels
+        },
+        total_employees=Count("employee")
+    )
+    return statistics
