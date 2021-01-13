@@ -49,7 +49,7 @@ class SerializerChooseMixin:
     def get_serializer_class(self):
         if self.action == "retrieve" or self.action == "list":
             return self.read_only_serializer
-        return write_serializer
+        return self.write_serializer
 
 
 """
@@ -67,40 +67,40 @@ class TechnologyViewSet(CreateRetrieveUpdateViewSet):
     serializer_class = TechnologySerializer
 
 
-class SkillViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
+class SkillViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Skill.objects.all()
     write_serializer = SkillSerializer
     read_only_serializer = SkillReadOnlySerializer
 
 
-class GroupViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
+class GroupViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Group.objects.all()
     write_serializer = GroupSerializer
     read_only_serializer = GroupReadOnlySerializer
 
 
-class TeamViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
+class TeamViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Team.objects.all()
     write_serializer = TeamSerializer
     read_only_serializer = TeamReadOnlySerializer
 
 
-class DepartmentViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
+class DepartmentViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Department.objects.all()
     write_serializer = DepartmentSerializer
     read_only_serializer = DepartmentReadOnlySerializer
 
 
-class PositionViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
+class PositionViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Position.objects.all()
     write_serializer = PositionSerializer
     read_only_serializer = PositionReadOnlySerializer
 
 
 class EmployeeViewSet(
+    SerializerChooseMixin,
     CreateRetrieveUpdateViewSet,
     mixins.ListModelMixin,
-    SerializerChooseMixin
 ):
     queryset = Employee.objects.all()
     write_serializer = EmployeeSerializer
@@ -108,9 +108,9 @@ class EmployeeViewSet(
 
 
 class ProjectViewSet(
+    SerializerChooseMixin,
     CreateRetrieveUpdateViewSet,
     mixins.ListModelMixin,
-    SerializerChooseMixin
 ):
     queryset = Project.objects.all()
     write_serializer = ProjectSerializer
@@ -118,9 +118,9 @@ class ProjectViewSet(
 
 
 class OpportunityViewSet(
+    SerializerChooseMixin,
     CreateRetrieveUpdateViewSet,
-    mixins.ListModelMixin,
-    SerializerChooseMixin
+    mixins.ListModelMixin
 ):
     queryset = Opportunity.objects.all()
     write_serializer = OpportunitySerializer
