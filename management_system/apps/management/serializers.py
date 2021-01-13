@@ -1,10 +1,11 @@
-from rest_framework import serializers
-
 from management.models import (
-    Department, Employee, Group, Location,
-    Opportunity, Position, Project,
-    Skill, Team, Technology
+    Department, Employee, Group,
+    Location, Opportunity, Position,
+    PositionStatus, Project, Skill,
+    Team, Technology,
 )
+
+from rest_framework import serializers
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -44,6 +45,18 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    @staticmethod
+    def validate_opportunity(value):
+        if not value:
+            raise serializers.ValidationError("Opportunity can't be blank")
+        if (
+            Position.objects.filter(
+                opportunity=value, status=PositionStatus.ACTIVE
+            ).exists()
+        ):
+            raise serializers.ValidationError("Not all positions are secured!")
+        return value
+
     class Meta:
         model = Project
         fields = "__all__"

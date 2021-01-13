@@ -1,8 +1,7 @@
-from rest_framework import mixins, viewsets
-
 from management.models import (
-    Department, Employee, Group, Location, Opportunity,
-    Position, Project, Skill, Team, Technology
+    Department, Employee, Group,
+    Location, Opportunity, Position,
+    Project, Skill, Team, Technology,
 )
 from management.serializers import (
     DepartmentReadOnlySerializer, DepartmentSerializer,
@@ -13,11 +12,21 @@ from management.serializers import (
     PositionSerializer, ProjectReadOnlySerializer,
     ProjectSerializer, SkillReadOnlySerializer,
     SkillSerializer, TeamReadOnlySerializer,
-    TeamSerializer, TechnologySerializer
+    TeamSerializer, TechnologySerializer,
+)
+from management.services.statistics import (
+    count_opportunities_by_priorities,
+    get_all_department_stats,
+    get_domain_opportunity_stats
 )
 
+from rest_framework import mixins, status, viewsets
+from rest_framework.views import Response
 
-# Classes that should be inherited
+
+"""
+Classes to be inherited 
+"""
 
 
 class CreateRetrieveUpdateViewSet(
@@ -29,7 +38,23 @@ class CreateRetrieveUpdateViewSet(
     pass
 
 
-# Custom classes
+class SerializerChooseMixin:
+    """
+    Mixin providing serializer choosing when it's needed,
+    Override read_only_serializer and write_serializer class attributes
+    """
+    read_only_serializer = None
+    write_serializer = None
+
+    def get_serializer_class(self):
+        if self.action == "retrieve" or self.action == "list":
+            return self.read_only_serializer
+        return self.write_serializer
+
+
+"""
+API endpoints
+"""
 
 
 class LocationViewSet(CreateRetrieveUpdateViewSet):
@@ -42,73 +67,98 @@ class TechnologyViewSet(CreateRetrieveUpdateViewSet):
     serializer_class = TechnologySerializer
 
 
-class SkillViewSet(CreateRetrieveUpdateViewSet):
+class SkillViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Skill.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return SkillReadOnlySerializer
-        return SkillSerializer
+    write_serializer = SkillSerializer
+    read_only_serializer = SkillReadOnlySerializer
 
 
-class GroupViewSet(CreateRetrieveUpdateViewSet):
+class GroupViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Group.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return GroupReadOnlySerializer
-        return GroupSerializer
+    write_serializer = GroupSerializer
+    read_only_serializer = GroupReadOnlySerializer
 
 
-class TeamViewSet(CreateRetrieveUpdateViewSet):
+class TeamViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Team.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return TeamReadOnlySerializer
-        return TeamSerializer
+    write_serializer = TeamSerializer
+    read_only_serializer = TeamReadOnlySerializer
 
 
-class DepartmentViewSet(CreateRetrieveUpdateViewSet):
+class DepartmentViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Department.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return DepartmentReadOnlySerializer
-        return DepartmentSerializer
+    write_serializer = DepartmentSerializer
+    read_only_serializer = DepartmentReadOnlySerializer
 
 
-class PositionViewSet(CreateRetrieveUpdateViewSet):
+class PositionViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Position.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return PositionReadOnlySerializer
-        return PositionSerializer
+    write_serializer = PositionSerializer
+    read_only_serializer = PositionReadOnlySerializer
 
 
-class EmployeeViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class EmployeeViewSet(
+    SerializerChooseMixin,
+    mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
+):
     queryset = Employee.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return EmployeeReadOnlySerializer
-        return EmployeeSerializer
+    write_serializer = EmployeeSerializer
+    read_only_serializer = EmployeeReadOnlySerializer
 
 
-class ProjectViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class ProjectViewSet(
+    SerializerChooseMixin,
+    mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
+):
     queryset = Project.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return ProjectReadOnlySerializer
-        return ProjectSerializer
+    write_serializer = ProjectSerializer
+    read_only_serializer = ProjectReadOnlySerializer
 
 
-class OpportunityViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class OpportunityViewSet(
+    SerializerChooseMixin,
+    mixins.ListModelMixin,
+    CreateRetrieveUpdateViewSet
+):
     queryset = Opportunity.objects.all()
+    write_serializer = OpportunitySerializer
+    read_only_serializer = OpportunityReadOnlySerializer
 
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return OpportunityReadOnlySerializer
-        return OpportunitySerializer
+
+"""
+Statistics endpoints
+"""
+
+
+class DepartmentStatsViewSet(viewsets.GenericViewSet):
+
+    def retrieve(self, request, *args, **kwargs):
+        stats = get_all_department_stats(kwargs['pk'])
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )
+
+
+class OpportunityStatsViewSet(viewsets.GenericViewSet):
+
+    def list(self, request, *args, **kwargs):
+        stats = count_opportunities_by_priorities()
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )
+
+
+class DomainOpportunityViewSet(viewsets.GenericViewSet):
+
+    lookup_url_kwarg = 'domain_name'
+
+    def retrieve(self, request, *args, **kwargs):
+        stats = get_domain_opportunity_stats(kwargs['domain_name'])
+        return Response({
+            'statistics': stats},
+            status=status.HTTP_200_OK
+        )
