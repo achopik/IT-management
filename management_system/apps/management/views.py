@@ -23,7 +23,10 @@ from management.services.statistics import (
 from rest_framework import mixins, status, viewsets
 from rest_framework.views import Response
 
-# Classes that should be inherited
+
+"""
+Classes to be inherited 
+"""
 
 
 class CreateRetrieveUpdateViewSet(
@@ -35,7 +38,23 @@ class CreateRetrieveUpdateViewSet(
     pass
 
 
-# Custom classes
+class SerializerChooseMixin:
+    """
+    Mixin providing serializer choosing when it's needed,
+    Override read_only_serializer and write_serializer class attributes
+    """
+    read_only_serializer = None
+    write_serializer = None
+
+    def get_serializer_class(self):
+        if self.action == "retrieve" or self.action == "list":
+            return self.read_only_serializer
+        return write_serializer
+
+
+"""
+API endpoints
+"""
 
 
 class LocationViewSet(CreateRetrieveUpdateViewSet):
@@ -48,76 +67,69 @@ class TechnologyViewSet(CreateRetrieveUpdateViewSet):
     serializer_class = TechnologySerializer
 
 
-class SkillViewSet(CreateRetrieveUpdateViewSet):
+class SkillViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
     queryset = Skill.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return SkillReadOnlySerializer
-        return SkillSerializer
+    write_serializer = SkillSerializer
+    read_only_serializer = SkillReadOnlySerializer
 
 
-class GroupViewSet(CreateRetrieveUpdateViewSet):
+class GroupViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
     queryset = Group.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return GroupReadOnlySerializer
-        return GroupSerializer
+    write_serializer = GroupSerializer
+    read_only_serializer = GroupReadOnlySerializer
 
 
-class TeamViewSet(CreateRetrieveUpdateViewSet):
+class TeamViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
     queryset = Team.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return TeamReadOnlySerializer
-        return TeamSerializer
+    write_serializer = TeamSerializer
+    read_only_serializer = TeamReadOnlySerializer
 
 
-class DepartmentViewSet(CreateRetrieveUpdateViewSet):
+class DepartmentViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
     queryset = Department.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return DepartmentReadOnlySerializer
-        return DepartmentSerializer
+    write_serializer = DepartmentSerializer
+    read_only_serializer = DepartmentReadOnlySerializer
 
 
-class PositionViewSet(CreateRetrieveUpdateViewSet):
+class PositionViewSet(CreateRetrieveUpdateViewSet, SerializerChooseMixin):
     queryset = Position.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return PositionReadOnlySerializer
-        return PositionSerializer
+    write_serializer = PositionSerializer
+    read_only_serializer = PositionReadOnlySerializer
 
 
-class EmployeeViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class EmployeeViewSet(
+    CreateRetrieveUpdateViewSet,
+    mixins.ListModelMixin,
+    SerializerChooseMixin
+):
     queryset = Employee.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return EmployeeReadOnlySerializer
-        return EmployeeSerializer
+    write_serializer = EmployeeSerializer
+    read_only_serializer = EmployeeReadOnlySerializer
 
 
-class ProjectViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class ProjectViewSet(
+    CreateRetrieveUpdateViewSet,
+    mixins.ListModelMixin,
+    SerializerChooseMixin
+):
     queryset = Project.objects.all()
-
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return ProjectReadOnlySerializer
-        return ProjectSerializer
+    write_serializer = ProjectSerializer
+    read_only_serializer = ProjectReadOnlySerializer
 
 
-class OpportunityViewSet(CreateRetrieveUpdateViewSet, mixins.ListModelMixin):
+class OpportunityViewSet(
+    CreateRetrieveUpdateViewSet,
+    mixins.ListModelMixin,
+    SerializerChooseMixin
+):
     queryset = Opportunity.objects.all()
+    write_serializer = OpportunitySerializer
+    read_only_serializer = OpportunityReadOnlySerializer
 
-    def get_serializer_class(self):
-        if self.action == "retrieve" or self.action == "list":
-            return OpportunityReadOnlySerializer
-        return OpportunitySerializer
+
+"""
+Statistics API endpoints
+"""
 
 
 class DepartmentStatsViewSet(viewsets.GenericViewSet):
