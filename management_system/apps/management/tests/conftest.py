@@ -34,7 +34,10 @@ def location_obj():
 
 @pytest.fixture
 def department_obj():
-    return mixer.blend(Department)
+    return Department.objects.create(
+        name="Test",
+        utilization_current=20
+    )
 
 
 @pytest.fixture
