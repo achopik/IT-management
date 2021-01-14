@@ -101,4 +101,3 @@ class StatisticsServicesTest(APITestCase):
         result = get_domain_opportunity_stats(opportunity.domain_name)
         self.assertIn(f"{opportunity.domain_name}_count", result)
         self.assertEqual(result[f"{opportunity.domain_name}_count"], 1)
-
