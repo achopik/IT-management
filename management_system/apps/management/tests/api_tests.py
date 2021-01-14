@@ -28,7 +28,6 @@ class LocationTests(APITestCase):
         Checks if location detail endpoint sends data
         """
         response = self.client.get(self.url)
-        print(response.data)
         self.assertGreater(len(response.data), 3)
 
 
