@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.test import TestCase
 
 from management.models import Opportunity, Department, Employee
 from management.services.statistics import (
@@ -102,3 +101,4 @@ class StatisticsServicesTest(APITestCase):
         result = get_domain_opportunity_stats(opportunity.domain_name)
         self.assertIn(f"{opportunity.domain_name}_count", result)
         self.assertEqual(result[f"{opportunity.domain_name}_count"], 1)
+

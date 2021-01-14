@@ -115,3 +115,66 @@ class EmployeeTest(APITestCase):
         """
         response = self.client.get(self.url)
         self.assertGreater(len(response.data), 3)
+
+
+class OpportunityTest(APITestCase):
+
+    url = reverse("opportunity-list")
+
+    @pytest.mark.usefixtures("opportunity_obj")
+    def test_opportunity_endpoint_available(self):
+        """
+        Checks if we can use opportunity endpoint without errors
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @pytest.mark.usefixtures("opportunity_obj")
+    def test_opportunity_list(self):
+        """
+        Checks if endpoint "opportunity list" sends data
+        """
+        response = self.client.get(self.url)
+        self.assertGreater(len(response.data), 3)
+
+
+class ProjectTest(APITestCase):
+
+    url = reverse("project-list")
+
+    @pytest.mark.usefixtures("project_obj")
+    def test_project_endpoint_available(self):
+        """
+        Checks if we can use project endpoint without errors
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @pytest.mark.usefixtures("project_obj")
+    def test_project_list(self):
+        """
+        Checks if endpoint "project list" sends data
+        """
+        response = self.client.get(self.url)
+        self.assertGreater(len(response.data), 3)
+
+
+class PositionTest(APITestCase):
+
+    url = reverse("position-detail", args=["1"])
+
+    @pytest.mark.usefixtures("position_obj")
+    def test_position_endpoint_available(self):
+        """
+        Checks if we can use position endpoint without errors
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @pytest.mark.usefixtures("position_obj")
+    def test_position_list(self):
+        """
+        Checks if endpoint "position detail" sends data
+        """
+        response = self.client.get(self.url)
+        self.assertGreater(len(response.data), 3)

@@ -78,6 +78,7 @@ def position_obj(opportunity_obj, employee_obj, location_obj):
         assignment=employee_obj,
         location=location_obj,
         supervisor=employee_obj,
+        status=PositionStatus.ACTIVE.name
     )
 
 
