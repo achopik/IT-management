@@ -68,8 +68,4 @@ class Team(Group):
     A team with its lead and target
     """
 
-    utilization_target = models.ForeignKey(
-        Technology,
-        on_delete=models.SET_NULL,
-        null=True
-    )
+    utilization_target = models.PositiveSmallIntegerField()
