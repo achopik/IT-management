@@ -22,6 +22,7 @@ from management.services.statistics import (
 
 from rest_framework import mixins, status, viewsets
 from rest_framework.views import Response
+from rest_framework.decorators import action
 
 
 """
@@ -90,6 +91,14 @@ class DepartmentViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     write_serializer = DepartmentSerializer
     read_only_serializer = DepartmentReadOnlySerializer
 
+    @action(detail=True)
+    def statistics(self, request, pk=None):
+        stats = get_all_department_stats(pk)
+        return Response({
+            **stats},
+            status=status.HTTP_200_OK
+        )
+
 
 class PositionViewSet(SerializerChooseMixin, CreateRetrieveUpdateViewSet):
     queryset = Position.objects.all()
@@ -126,30 +135,18 @@ class OpportunityViewSet(
     write_serializer = OpportunitySerializer
     read_only_serializer = OpportunityReadOnlySerializer
 
+    @action(detail=False)
+    def statistics(self, request):
+        stats = count_opportunities_by_priorities()
+        return Response({
+            **stats},
+            status=status.HTTP_200_OK
+        )
+
 
 """
 Statistics endpoints
 """
-
-
-class DepartmentStatsViewSet(viewsets.GenericViewSet):
-
-    def retrieve(self, request, *args, **kwargs):
-        stats = get_all_department_stats(kwargs['pk'])
-        return Response({
-            'statistics': stats},
-            status=status.HTTP_200_OK
-        )
-
-
-class OpportunityStatsViewSet(viewsets.GenericViewSet):
-
-    def list(self, request, *args, **kwargs):
-        stats = count_opportunities_by_priorities()
-        return Response({
-            'statistics': stats},
-            status=status.HTTP_200_OK
-        )
 
 
 class DomainOpportunityViewSet(viewsets.GenericViewSet):
@@ -159,6 +156,6 @@ class DomainOpportunityViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, *args, **kwargs):
         stats = get_domain_opportunity_stats(kwargs['domain_name'])
         return Response({
-            'statistics': stats},
+            **stats},
             status=status.HTTP_200_OK
         )
