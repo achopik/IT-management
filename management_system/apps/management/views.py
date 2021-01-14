@@ -156,6 +156,6 @@ class DomainOpportunityViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, *args, **kwargs):
         stats = get_domain_opportunity_stats(kwargs['domain_name'])
         return Response({
-            'statistics': stats},
+            **stats},
             status=status.HTTP_200_OK
         )

@@ -36,7 +36,9 @@ class DomainStatsTest(APITestCase):
         Checks if endpoint opportunity domain statistics sends data
         """
         response = self.client.get(self.url)
-        self.assertIn("statistics", response.data)
+        opportunity = Opportunity.objects.first()
+        self.assertIn(f"{opportunity.domain_name}_count", response.data)
+        self.assertEqual(response.data[f"{opportunity.domain_name}_count"], 1)
 
 
 class StatisticsServicesTest(APITestCase):
